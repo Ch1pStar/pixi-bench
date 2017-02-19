@@ -1,90 +1,60 @@
 'use strict'
 
 let renderer;
+let test;
+let txt;
 
-const gravity = 0.75;
-const minX = 0;
-const maxX = window.innerWidth;
-const minY = 0;
-const maxY = window.innerHeight-80;
-const sprites = [];
-const containers = [];
-const maxSprites = 15000;
-const batchSize = 1500;
+const w = 800;
+const h = 600;
 
+// const w = window.innerWidth;
+// const h = window.innerHeight
 
-const createSp = (txt) => {
-  const sp = new PIXI.Sprite(txt);
-  sp.speedX = Math.random() * 10;
-  sp.speedY = (Math.random() * 10) - 5;
-  sp.x = Math.random() * maxX;
-
-  sp.update = () => {
-    sp.position.x += sp.speedX;
-    sp.position.y += sp.speedY;
-    
-    sp.speedY += gravity;
-    if (sp.position.x <= minX || sp.position.x >= maxX) {
-        sp.speedX *= -1
-    }
-
-    if (sp.position.y >= maxY) {
-        sp.speedY *= -gravity;
-        // random boosts
-        if (Math.random() > 0.5){
-            sp.speedY -= Math.random() * 15;
-        }
-    }else if (sp.position.y <= minY) {
-        sp.position.y = 1;
-        sp.speedY = 0;
-    }
-  }
-
-  return sp;
-}
+window.BaseBench = BaseBench;
+window.ProtonBench = ProtonBench;
 
 const init = ()=>{
-  renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
+
+  renderer = PIXI.autoDetectRenderer(w, h);
   // renderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.view);
 
-  const stage = new PIXI.Container();
-  // const stage = new PIXI.particles.ParticleContainer();
-  const txt = PIXI.Texture.fromImage('img/p4.png');
+  txt = new PIXI.Texture(PIXI.Texture.fromImage('img/bunnys.png'), new PIXI.Rectangle(2, 86, 26, 37));
+
+  // test = window.test = new BaseBench(w, h, txt);
+  test = window.test = new ProtonBench(w, h, txt);
 
 
-  let i = 0;
-  const arg = ()=>{
+  const spCounter = new PIXI.Text('lel', {fill: 0xFFFFFF});
+  test.stage.addChild(spCounter);
 
 
-    const cnt = new PIXI.particles.ParticleContainer();
-    stage.addChild(cnt);
-    // containers.push(cnt);
-    for(let k=0;k<batchSize;k++){
-      const itm = createSp(txt);
-      sprites.push(itm);
-      cnt.addChild(itm);
-    }
-    if(i++ < maxSprites/batchSize){
-      setTimeout(arg, 500);
-    }
-  };
-
-  arg();
-
-
+  let tick = 0;
+  let currTime = performance.now();
   const draw = t=>{
+    // console.log(t - currTime);
+    currTime = t;
     requestAnimationFrame(draw);
+    renderer.render(test.stage);
+    test.update();
 
-    sprites.forEach((sp)=>sp.update());
-
-    // containers.forEach((cnt)=>renderer.render(cnt));
-    renderer.render(stage);
+    spCounter.text = test.spritesCnt;
 
   }
 
   draw();
+
+
+  document.querySelectorAll('.bench-t').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      // test.stage.destroy();
+      delete test.stage;
+      test = new window[link.dataset.benchT](w, h, txt);
+      test.stage.addChild(spCounter);
+    });
+  });
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
   init();
