@@ -13,7 +13,7 @@ class BaseBench{
     this.maxY = h - 20;
     this.sprites = [];
     this.maxSprites = maxSprites;
-    this.batchSize = maxSprites;
+    this.batchSize = 50;
     this.i = 0;
 
     const batchText = this.batchText = new PIXI.Text(`${this.i}/${this.maxSprites/this.batchSize}`, {fill: 0xffffff});
@@ -47,10 +47,10 @@ class BaseBench{
     }
     this.i++;
     console.log(`${this.i}/${maxSprites/batchSize}`);
-    // if((++this.i < maxSprites/batchSize) && this.stage){
-      // setTimeout(this.addBatch.bind(this, wTxt), 200);
+    if((this.i < maxSprites/batchSize) && this.stage){
+      setTimeout(this.addBatch.bind(this, wTxt), 100);
       // this.addBatch(wTxt);
-    // } 
+    } 
   }
 
   createSp(txt) {
@@ -64,29 +64,33 @@ class BaseBench{
     sp.speedY = (Math.random() * 10) - 5;
     sp.x = Math.random() * maxX;
     sp.scale.set(0.5 + Math.random()*0.5);
-
-    sp.width = 20;
-    sp.height = 20;
+    sp.anchor.y = 1;
 
     sp.update = () => {
       sp.position.x += sp.speedX;
       sp.position.y += sp.speedY;
-      
       sp.speedY += gravity;
-      if (sp.position.x <= minX || sp.position.x >= maxX) {
-          sp.speedX *= -1
+
+      if (sp.position.x > maxX) {
+        sp.speedX *= -1;
+        sp.position.x = maxX;
+      } else if (sp.position.x < minX) {
+        sp.speedX *= -1;
+        sp.position.x = minX;
+      }
+      
+      if (sp.position.y > maxY) {
+        sp.speedY *= -0.85;
+        sp.position.y = maxY;
+        sp.spin = (Math.random()-0.5) * 0.2
+        if (Math.random() > 0.5) {
+          sp.speedY -= Math.random() * 6;
+        }
+      } else if (sp.position.y < minY) {
+        sp.speedY = 0;
+        sp.position.y = minY;
       }
 
-      if (sp.position.y >= maxY) {
-          sp.speedY *= -gravity;
-          // random boosts
-          if (Math.random() > 0.5){
-              sp.speedY -= Math.random() * 15;
-          }
-      }else if (sp.position.y <= minY) {
-          sp.position.y = 1;
-          sp.speedY = 0;
-      }
     }
 
     return sp;

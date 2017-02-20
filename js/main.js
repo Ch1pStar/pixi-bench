@@ -47,6 +47,10 @@ const init = () => {
     backgroundColor: 0
   });
   document.body.appendChild(renderer.view);
+  const stats = new Stats();
+  document.body.appendChild( stats.domElement );
+  stats.domElement.style.position = "absolute";
+  stats.domElement.style.top = "520px";
 
   const spCounter = new PIXI.Text('lel', {fill: 0xffffff});
   spCounter.y = h - spCounter.height;
@@ -97,12 +101,14 @@ const init = () => {
     // console.log(t - currTime);
     currTime = t;
     requestAnimationFrame(draw);
+    stats.begin();
     renderer.render(test.stage);
     test.update(elapsed);
+    stats.end();
     spCounter.text = test.spritesCnt;
   }
 
-  create_test_case('PixiBench', 'ParticleContainer', textures.bunny);
+  create_test_case('BaseBench', 'ParticleContainer', textures.bunny);
   // create_test_case('ProtonBench', 'ParticleContainer', textures.bunny);
 
   create_ui();
