@@ -1,29 +1,30 @@
 'use strict'
 
-
-
 class BaseBench{
 
-  constructor(w, h, wTxt){
+  constructor(w, h, wTxt, container, maxSprites) {
     const stage = this.stage = new PIXI.Container();
     window.stage = stage;
 
     this.gravity = 0.75;
     this.minX = 0;
-    this.maxX = w;
+    this.maxX = w - 20;
     this.minY = 0;
     this.maxY = h - 20;
     this.sprites = [];
-    this.maxSprites = 35000;
-    this.batchSize = 1;
+    this.maxSprites = maxSprites;
+    this.batchSize = maxSprites;
     this.i = 0;
 
     const batchText = this.batchText = new PIXI.Text(`${this.i}/${this.maxSprites/this.batchSize}`, {fill: 0xffffff});
     batchText.y = 22;
     stage.addChild(batchText);
 
-    this.addBatch(wTxt);
+    const cnt = this.cnt = container;
 
+    stage.addChild(cnt);
+
+    this.addBatch(wTxt);
   }
 
   update(t) {
@@ -35,26 +36,21 @@ class BaseBench{
     const sprites = this.sprites;
     const maxSprites = this.maxSprites;
     const batchSize = this.batchSize;
-    const stage = this.stage;
-    const cnt = new PIXI.particles.ParticleContainer(batchSize, {
-      scale: false,
-      position: true,
-      rotation: false,
-      uvs: false,
-      alpha: false
-    });
+    // const stage = this.stage;
+    const cnt = this.cnt
 
-    stage.addChild(cnt);
-    for(let k=0;k<batchSize;k++){
+    for(let k=0;k<batchSize;k++) {
       const itm = this.createSp(wTxt);
       sprites.push(itm);
       cnt.addChild(itm);
       // stage.addChild(itm);
     }
+    this.i++;
     console.log(`${this.i}/${maxSprites/batchSize}`);
-    if((++this.i < maxSprites/batchSize) && this.stage){
-      setTimeout(this.addBatch.bind(this), 200);
-    } 
+    // if((++this.i < maxSprites/batchSize) && this.stage){
+      // setTimeout(this.addBatch.bind(this, wTxt), 200);
+      // this.addBatch(wTxt);
+    // } 
   }
 
   createSp(txt) {
@@ -67,7 +63,10 @@ class BaseBench{
     sp.speedX = Math.random() * 10;
     sp.speedY = (Math.random() * 10) - 5;
     sp.x = Math.random() * maxX;
-    sp.scale.set(0.5 + Math.random()*0.5);
+    // sp.scale.set(0.5 + Math.random()*0.5);
+
+    sp.width = 20;
+    sp.height = 20;
 
     sp.update = () => {
       sp.position.x += sp.speedX;

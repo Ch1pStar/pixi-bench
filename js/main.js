@@ -2,7 +2,9 @@
 
 let renderer;
 let test;
-let txt;
+const bunnyTxt = new PIXI.Texture(PIXI.Texture.fromImage('img/bunnys.png'), new PIXI.Rectangle(2, 86, 26, 37));
+const lightTxt = new PIXI.Texture(PIXI.Texture.fromImage('img/p4.png'));
+const cardTxt = new PIXI.Texture(PIXI.Texture.fromImage('img/spade_A.png'));
 
 const w = 800;
 const h = 600;
@@ -12,47 +14,100 @@ const h = 600;
 
 window.BaseBench = BaseBench;
 window.ProtonBench = ProtonBench;
+window.PixiBench = PixiParticlesBench;
 
-const init = ()=>{
+let maxParticles = 15000;
 
-  renderer = PIXI.autoDetectRenderer(w, h);
+const textures = {
+  bunny: bunnyTxt,
+  light: lightTxt,
+  card: cardTxt,
+};
+
+const containers = {
+  'Container': {
+    obj: PIXI.Container,
+    config: {}
+  },
+  'ParticleContainer': {
+    obj: PIXI.particles.ParticleContainer,
+    config: {
+      scale: false,
+      position: true,
+      rotation: false,
+      uvs: false,
+      alpha: false
+    },
+  },
+};
+
+const init = () => {
   // renderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight);
+  renderer = PIXI.autoDetectRenderer(w, h, {
+    backgroundColor: 0xcccccc
+  });
   document.body.appendChild(renderer.view);
 
-  txt = new PIXI.Texture(PIXI.Texture.fromImage('img/bunnys.png'), new PIXI.Rectangle(2, 86, 26, 37));
+  const spCounter = new PIXI.Text('lel', {fill: 0xffffff});
+  spCounter.y = h - spCounter.height;
 
-  // test = window.test = new BaseBench(w, h, txt);
-  test = window.test = new ProtonBench(w, h, txt);
+  const create_test_case = (type, containerType, txt) => {
+    if(test && test.stage) delete test.stage;
 
+    const container = new containers[containerType].obj(maxParticles, containers[containerType].config);
 
-  const spCounter = new PIXI.Text('lel', {fill: 0xFFFFFF});
-  test.stage.addChild(spCounter);
+    test = new window[type](w, h, txt, container, maxParticles);
+    test.stage.addChild(spCounter);
+  }
 
+  const create_ui = () => {
+    const obj = {
+        maxParticles : maxParticles,
+        testCases: [
+          'BaseBench',
+          'ProtonBench',
+          'PixiBench',
+        ],
+        currCase: 'PixiBench',
+        containerType: Object.keys(containers),
+        currContainer: 'ParticleContainer',
+        texture: Object.keys(textures),
+        currTxt: 'bunny'
+    };
+    const controlKit = new ControlKit();
+    const panel = controlKit.addPanel({
+      align: 'left',
+      width: 200
+    })
+    .addGroup()
+    .addSubGroup()
+    .addStringInput(obj, 'maxParticles')
+    .addSelect(obj, 'testCases', { target: 'currCase', label: 'Test case' })
+    .addSelect(obj, 'containerType', { target: 'currContainer', label: 'Container type' })
+    .addSelect(obj, 'texture', { target: 'currTxt', label: 'Texture' })
+    .addButton('Run', () => {
+      maxParticles = parseInt(obj.maxParticles, 10);
+      create_test_case(obj.currCase, obj.currContainer, textures[obj.currTxt]);
+    });
+  }
 
-  let tick = 0;
   let currTime = performance.now();
-  const draw = t=>{
+  const draw = t => {
+    const elapsed = t - currTime; 
     // console.log(t - currTime);
     currTime = t;
     requestAnimationFrame(draw);
     renderer.render(test.stage);
-    test.update();
-
+    test.update(elapsed);
     spCounter.text = test.spritesCnt;
-
   }
 
+  // create_test_case('PixiBench', 'ParticleContainer', textures.bunny);
+  create_test_case('ProtonBench', 'ParticleContainer', textures.bunny);
+
+  create_ui();
+
   draw();
-
-
-  document.querySelectorAll('.bench-t').forEach((link) => {
-    link.addEventListener('click', (e) => {
-      // test.stage.destroy();
-      delete test.stage;
-      test = new window[link.dataset.benchT](w, h, txt);
-      test.stage.addChild(spCounter);
-    });
-  });
 }
 
 
