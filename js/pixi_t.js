@@ -12,49 +12,49 @@ class PixiParticlesBench{
     const cnt = this.cnt = container;
     stage.addChild(cnt);
 
-    const emitter = this.emitter = new PIXI.particles.Emitter(cnt, txt, {
-      alpha: {
-          start: 0.8,
-          end: 0.1
+    cnt.x = w / 2;
+    cnt.y = h / 2;
+
+    const emitter = this.emitter = new PIXI.particles.Emitter(cnt, [txt], {
+      // "alpha": {
+      //   "start": 1,
+      //   "end": 0.22
+      // },
+      // "scale": {
+      //   "start": 0.25,
+      //   "end": 0.75,
+      //   "minimumScaleMultiplier":0.5
+      // },
+      // "color": {
+      //   "start": "ffffff",
+      //   "end": "ffffff"
+      // },
+      "speed": {
+        "start": 200,
+        "end": 50
       },
-      scale: {
-          start: 1,
-          end: 0.3
+      "startRotation": {
+        "min": 0,
+        "max": 360
       },
-      color: {
-          start: "fb1010",
-          end: "f5b830"
+      // "rotationSpeed": {
+      //   "min": 0,
+      //   "max": 10
+      // },
+      "lifetime": {
+        "min": 12,
+        "max": 12
       },
-      speed: {
-          start: 200,
-          end: 100
+      "blendMode": "normal",
+      "frequency": 0.0005,
+      "emitterLifetime": 0,
+      "maxParticles": maxSprites,
+      "pos": {
+        "x": 0,
+        "y": 0
       },
-      startRotation: {
-          min: 0,
-          max: 360
-      },
-      rotationSpeed: {
-          min: 0,
-          max: 0
-      },
-      lifetime: {
-          min: 0.5,
-          max: 0.5
-      },
-      frequency: 0.008,
-      emitterLifetime: 0.31,
-      maxParticles: maxSprites,
-      pos: {
-          x: 0,
-          y: 0
-      },
-      addAtBack: false,
-      spawnType: "circle",
-      spawnCircle: {
-          x: 0,
-          y: 0,
-          r: 10
-      }
+      "addAtBack": false,
+      "spawnType": "point"
     });
   }
 
@@ -68,6 +68,7 @@ class PixiParticlesBench{
   }
 
   update(t) {
-    this.emitter.update(t * 0.001);
+    // this.emitter.update(t * 0.001);
+    this.emitter.update(0.016);
   }
 }

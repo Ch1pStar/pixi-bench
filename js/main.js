@@ -3,7 +3,7 @@
 let renderer;
 let test;
 const bunnyTxt = new PIXI.Texture(PIXI.Texture.fromImage('img/bunnys.png'), new PIXI.Rectangle(2, 86, 26, 37));
-const lightTxt = new PIXI.Texture(PIXI.Texture.fromImage('img/p4.png'));
+const lightTxt = new PIXI.Texture(PIXI.Texture.fromImage('img/p3.png'));
 const cardTxt = new PIXI.Texture(PIXI.Texture.fromImage('img/spade_A.png'));
 
 const w = 800;
@@ -16,7 +16,7 @@ window.BaseBench = BaseBench;
 window.ProtonBench = ProtonBench;
 window.PixiBench = PixiParticlesBench;
 
-let maxParticles = 15000;
+let maxParticles = 35000;
 
 const textures = {
   bunny: bunnyTxt,
@@ -32,11 +32,11 @@ const containers = {
   'ParticleContainer': {
     obj: PIXI.particles.ParticleContainer,
     config: {
-      scale: false,
+      scale: true,
       position: true,
-      rotation: false,
+      rotation: true,
       uvs: false,
-      alpha: false
+      alpha: true
     },
   },
 };
@@ -44,7 +44,7 @@ const containers = {
 const init = () => {
   // renderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight);
   renderer = PIXI.autoDetectRenderer(w, h, {
-    backgroundColor: 0xcccccc
+    backgroundColor: 0
   });
   document.body.appendChild(renderer.view);
 
@@ -102,8 +102,8 @@ const init = () => {
     spCounter.text = test.spritesCnt;
   }
 
-  // create_test_case('PixiBench', 'ParticleContainer', textures.bunny);
-  create_test_case('ProtonBench', 'ParticleContainer', textures.bunny);
+  create_test_case('PixiBench', 'ParticleContainer', textures.bunny);
+  // create_test_case('ProtonBench', 'ParticleContainer', textures.bunny);
 
   create_ui();
 

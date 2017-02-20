@@ -63,7 +63,7 @@ class BaseBench{
     sp.speedX = Math.random() * 10;
     sp.speedY = (Math.random() * 10) - 5;
     sp.x = Math.random() * maxX;
-    // sp.scale.set(0.5 + Math.random()*0.5);
+    sp.scale.set(0.5 + Math.random()*0.5);
 
     sp.width = 20;
     sp.height = 20;
