@@ -13,7 +13,7 @@ class BaseBench{
     this.maxY = h - 20;
     this.sprites = [];
     this.maxSprites = maxSprites;
-    this.batchSize = 50;
+    this.batchSize = 500;
     this.i = 0;
 
     const batchText = this.batchText = new PIXI.Text(`${this.i}/${this.maxSprites/this.batchSize}`, {fill: 0xffffff});
@@ -28,7 +28,11 @@ class BaseBench{
   }
 
   update(t) {
-    this.sprites.forEach((sp)=>sp.update());
+    const sprites = this.sprites;
+
+    for(let i=0;i<sprites.length;i++){
+      sprites[i].update();      
+    }
     this.batchText.text = `${this.i}/${this.maxSprites/this.batchSize}`;
   }
 
@@ -36,20 +40,17 @@ class BaseBench{
     const sprites = this.sprites;
     const maxSprites = this.maxSprites;
     const batchSize = this.batchSize;
-    // const stage = this.stage;
     const cnt = this.cnt
 
     for(let k=0;k<batchSize;k++) {
       const itm = this.createSp(wTxt);
       sprites.push(itm);
       cnt.addChild(itm);
-      // stage.addChild(itm);
     }
     this.i++;
     console.log(`${this.i}/${maxSprites/batchSize}`);
     if((this.i < maxSprites/batchSize) && this.stage){
       setTimeout(this.addBatch.bind(this, wTxt), 100);
-      // this.addBatch(wTxt);
     } 
   }
 
@@ -59,11 +60,14 @@ class BaseBench{
     const minY = this.minY;
     const maxY = this.maxY;
     const gravity = this.gravity;
+
     const sp = new PIXI.Sprite(txt);
     sp.speedX = Math.random() * 10;
     sp.speedY = (Math.random() * 10) - 5;
     sp.x = Math.random() * maxX;
+    sp.y = Math.random() * maxY;
     sp.scale.set(0.5 + Math.random()*0.5);
+    sp.rotation = (Math.random()-0.5)
     sp.anchor.y = 1;
 
     sp.update = () => {
@@ -74,7 +78,7 @@ class BaseBench{
       if (sp.position.x > maxX) {
         sp.speedX *= -1;
         sp.position.x = maxX;
-      } else if (sp.position.x < minX) {
+      }else if (sp.position.x < minX) {
         sp.speedX *= -1;
         sp.position.x = minX;
       }
@@ -86,7 +90,7 @@ class BaseBench{
         if (Math.random() > 0.5) {
           sp.speedY -= Math.random() * 6;
         }
-      } else if (sp.position.y < minY) {
+      }else if (sp.position.y < minY) {
         sp.speedY = 0;
         sp.position.y = minY;
       }

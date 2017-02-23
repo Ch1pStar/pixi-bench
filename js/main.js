@@ -16,7 +16,7 @@ window.BaseBench = BaseBench;
 window.ProtonBench = ProtonBench;
 window.PixiBench = PixiParticlesBench;
 
-let maxParticles = 35000;
+let maxParticles = 65000;
 
 const textures = {
   bunny: bunnyTxt,
@@ -32,11 +32,11 @@ const containers = {
   'ParticleContainer': {
     obj: PIXI.particles.ParticleContainer,
     config: {
-      scale: true,
+      scale: false,
       position: true,
-      rotation: true,
+      rotation: false,
       uvs: false,
-      alpha: true
+      alpha: false
     },
   },
 };
@@ -47,10 +47,10 @@ const init = () => {
     backgroundColor: 0
   });
   document.body.appendChild(renderer.view);
-  const stats = new Stats();
-  document.body.appendChild( stats.domElement );
-  stats.domElement.style.position = "absolute";
-  stats.domElement.style.top = "520px";
+  // const stats = new Stats();
+  // document.body.appendChild( stats.domElement );
+  // stats.domElement.style.position = "absolute";
+  // stats.domElement.style.top = "520px";
 
   const spCounter = new PIXI.Text('lel', {fill: 0xffffff});
   spCounter.y = h - spCounter.height;
@@ -97,14 +97,14 @@ const init = () => {
 
   let currTime = performance.now();
   const draw = t => {
-    const elapsed = t - currTime; 
+    const elapsed = t - currTime;
     // console.log(t - currTime);
     currTime = t;
     requestAnimationFrame(draw);
-    stats.begin();
+    // stats.begin();
     renderer.render(test.stage);
     test.update(elapsed);
-    stats.end();
+    // stats.end();
     spCounter.text = test.spritesCnt;
   }
 
