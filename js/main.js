@@ -17,12 +17,22 @@ const init = ()=>{
   Anim.load(currMc, (instance) => {
     window.instance = instance;
     console.log(instance);
-    // const c1 = instance.children[0];
-    // stage.addChild(c1);
 
-    instance.framerate = 5;
+    const sq = instance.innerFrames;
 
-    stage.addChild(instance);
+    stage.addChild(sq);
+    sq.stop();
+    console.log('waiting 1 second, before starting from frame 30');
+    setTimeout(()=>{
+      sq.gotoAndPlay(30);
+    }, 1000);
+
+
+    setTimeout(()=>{
+      
+      stage.addChild(instance);
+    }, 3000);
+
   });
 
   const draw = t=>{
