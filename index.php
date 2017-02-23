@@ -12,6 +12,17 @@
         }
     </style>
     <script type="text/javascript" src="lib/pixi.js"></script>
+    <script type="text/javascript" src="lib/pixi-animate.js"></script>
+
+    <?php
+        $path = "js/export/";
+        $handle=opendir($path);
+        while (($file = readdir($handle))!==false) {
+            if($file != '..' && $file != '.') echo "<script type=\"text/javascript\" src=\"$path$file\"></script>\n";
+        }
+        closedir($handle);
+    ?>
+
     <script type="text/javascript" src="js/main.js"></script>
 </head>
 <body>
