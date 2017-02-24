@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>asd</title>
+    <title>Party кълки</title>
 
     <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
     <style type="text/css">
@@ -11,6 +11,7 @@
             overflow: hidden;
         }
     </style>
+    <script type="text/javascript" src="lib/proton.js"></script>
     <script type="text/javascript" src="lib/pixi.js"></script>
     <script type="text/javascript" src="lib/pixi-animate.js"></script>
 
