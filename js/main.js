@@ -14,6 +14,7 @@ const h = 600;
 
 window.BaseBench = BaseBench;
 window.ProtonBench = ProtonBench;
+window.QuarkBench = QuarkBench;
 window.PixiBench = PixiParticlesBench;
 
 let maxParticles = 65000;
@@ -70,9 +71,10 @@ const init = () => {
         testCases: [
           'BaseBench',
           'ProtonBench',
+          'QuarkBench',
           'PixiBench',
         ],
-        currCase: 'PixiBench',
+        currCase: 'ProtonBench',
         containerType: Object.keys(containers),
         currContainer: 'ParticleContainer',
         texture: Object.keys(textures),
@@ -108,8 +110,8 @@ const init = () => {
     spCounter.text = test.spritesCnt;
   }
 
-  create_test_case('BaseBench', 'ParticleContainer', textures.bunny);
-  // create_test_case('ProtonBench', 'ParticleContainer', textures.bunny);
+  // create_test_case('BaseBench', 'ParticleContainer', textures.bunny);
+  create_test_case('ProtonBench', 'ParticleContainer', textures.bunny);
 
   create_ui();
 
