@@ -17,10 +17,10 @@ class ProtonBench{
     const proton = this.proton = new Proton();
     const emitter = this.emitter = new Proton.Emitter();
     //set Rate
-    emitter.rate = new Proton.Rate(Proton.getSpan(30, 50), .005);
+    emitter.rate = new Proton.Rate(35, .001);
     //add Initialize
     emitter.addInitialize(new Proton.Radius(15));
-    emitter.addInitialize(new Proton.Life(11));
+    emitter.addInitialize(new Proton.Life(20));
     emitter.addInitialize(new Proton.Velocity(2, Proton.getSpan(0, 360), 'polar'));
     //add Behaviour
     // emitter.addBehaviour(new Proton.Color('ff0000', 'random'));

@@ -74,7 +74,7 @@ const init = () => {
           'QuarkBench',
           'PixiBench',
         ],
-        currCase: 'QuarkBench',
+        currCase: 'ProtonBench',
         containerType: Object.keys(containers),
         currContainer: 'ParticleContainer',
         texture: Object.keys(textures),
@@ -111,9 +111,9 @@ const init = () => {
   }
 
   // create_test_case('BaseBench', 'ParticleContainer', textures.bunny);
+  create_test_case('ProtonBench', 'ParticleContainer', textures.bunny);
   // create_test_case('QuarkBench', 'ParticleContainer', textures.bunny);
-  // create_test_case('ProtonBench', 'ParticleContainer', textures.bunny);
-  create_test_case('PixiBench', 'ParticleContainer', textures.bunny);
+  // create_test_case('PixiBench', 'ParticleContainer', textures.bunny);
 
   create_ui();
 

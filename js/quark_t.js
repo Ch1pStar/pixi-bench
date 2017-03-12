@@ -17,10 +17,10 @@ class QuarkBench{
     const emitter = this.emitter = new Quark.Emitter(txt, cnt);
     window.emitter = emitter;
     //set Rate
-    emitter.rate = new Quark.Rate(Quark.getSpan(25,30), .1);
+    emitter.rate = new Quark.Rate(35, .001);
     //add Initialize
     emitter.addInitialize(new Quark.Radius(15));
-    emitter.addInitialize(new Quark.Life(31));
+    emitter.addInitialize(new Quark.Life(20));
     emitter.addInitialize(new Quark.Velocity(2, Quark.getSpan(0, 360), 'polar'));
     //add Behaviour
     // emitter.addBehaviour(new Proton.Color('ff0000', 'random'));
@@ -35,7 +35,7 @@ class QuarkBench{
       if(particle.sprite){
         // console.log('reuse');
         // sp = particle.sprite;
-        // sp.visible = true;
+        particle.sprite.visible = true;
         // sp.alpha = 1;
       }else{
         const sp = new PIXI.Sprite(txt);
@@ -64,7 +64,7 @@ class QuarkBench{
 
 
     emitter.particleDead.add((particle) =>{
-        // particle.sprite.visible = false;
+        particle.sprite.visible = false;
         // particle.sprite.alpha = 0;
       // cnt.removeChild(particle.sprite);
     });
@@ -80,8 +80,7 @@ class QuarkBench{
 
     // return len;
     // 
-    // return this.emitter.particleCount;
-    return this.emitter.activeCount+'\n'+this.cnt.children.length;
+    return this.emitter.activeCount;
   }
 
   update() {

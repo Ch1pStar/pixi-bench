@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>proton.js-render-custom-pixi.js</title>
+		<meta name="viewport" id="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta charset="utf-8">
+		<style type="text/css">
+			body {
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#container {
+				width: 1003px;
+				margin-top: 50px;
+				margin-left: -501px;
+				left: 50%;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+
+		</div>
+		<script src="lib/proton.js"></script>
+		<script src="lib/pixi.js"></script>
+		<script>
+			var canvas;
+			var context;
+			var proton;
+			var emitter;
+			var pool;
+			var stats;
+			var pixiStage;
+			var pixiRender;
+		
+			var spCounter = new PIXI.Text('lel', {fill: 0xffffff});
+			spCounter.y = 300;
+
+
+			Main();
+			function Main() {
+				createProton();
+				createRender();
+				tick();
+			}
+
+			function createProton() {
+				var texture = new PIXI.Texture.fromImage("img/bunny.png");
+				proton = new Proton();
+				emitter = new Proton.Emitter();
+				emitter.rate = new Proton.Rate(Proton.getSpan(20, 30), .005);
+			    //add Initialize
+				emitter.addInitialize(new Proton.ImageTarget(texture));
+			    emitter.addInitialize(new Proton.Radius(15));
+			    emitter.addInitialize(new Proton.Life(15));
+			    emitter.addInitialize(new Proton.Velocity(2, Proton.getSpan(0, 360), 'polar'));
+
+				emitter.p.x = 400;
+				emitter.p.y = 300;
+				emitter.emit();
+				proton.addEmitter(emitter);
+
+				pool = new Proton.Pool();
+			}
+
+			function createRender() {
+				var renderer = new Proton.Renderer('other', proton);
+				pixiRender = PIXI.autoDetectRenderer(800, 600);
+				document.getElementById('container').appendChild(pixiRender.view);
+				pixiStage = new PIXI.Stage;
+				pixiStage.addChild(spCounter);
+				renderer.onProtonUpdate = function() {
+
+				};
+				renderer.onParticleCreated = function(particle) {
+					var particleSprite = pool.get(PIXI.Sprite,[particle.target]);
+					particle.sprite = particleSprite;
+					pixiStage.addChild(particle.sprite);
+				};
+
+				renderer.onParticleUpdate = function(particle) {
+					transformSprite(particle.sprite, particle);
+				};
+
+				renderer.onParticleDead = function(particle) {
+					pixiStage.removeChild(particle.sprite);
+					pool.set(particle.sprite);
+					particle.sprite=null;
+					particle.taregt=null;
+				};
+				renderer.start();
+			}
+
+			function transformSprite(particleSprite, particle) {
+				particleSprite.position.x = particle.p.x;
+				particleSprite.position.y = particle.p.y;
+				particleSprite.scale.x = particle.scale;
+				particleSprite.scale.y = particle.scale;
+				particleSprite.anchor.x = 0.5;
+				particleSprite.anchor.y = 0.5;
+				particleSprite.alpha = particle.alpha;
+				particleSprite.rotation = particle.rotation*Math.PI/180;
+			}
+
+			function tick() {
+				requestAnimationFrame(tick);
+
+				proton.update();
+				spCounter.text = pixiStage.children.length;
+				pixiRender.render(pixiStage);
+			}
+		</script>
+	</body>
+</html>

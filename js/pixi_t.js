@@ -43,8 +43,8 @@ class PixiParticlesBench{
       //   "max": 10
       // },
       "lifetime": {
-        "min": 25,
-        "max": 25
+        "min": 22,
+        "max": 22
       },
       "blendMode": "normal",
       "frequency": 0.0005,
