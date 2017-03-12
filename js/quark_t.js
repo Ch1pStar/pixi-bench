@@ -14,13 +14,13 @@ class QuarkBench{
     stage.addChild(cnt);
 
 
-    const emitter = this.emitter = new Quark.Emitter();
+    const emitter = this.emitter = new Quark.Emitter(txt, cnt);
     window.emitter = emitter;
     //set Rate
-    emitter.rate = new Quark.Rate(Quark.getSpan(30, 50), .005);
+    emitter.rate = new Quark.Rate(Quark.getSpan(25,30), .1);
     //add Initialize
     emitter.addInitialize(new Quark.Radius(15));
-    emitter.addInitialize(new Quark.Life(10));
+    emitter.addInitialize(new Quark.Life(31));
     emitter.addInitialize(new Quark.Velocity(2, Quark.getSpan(0, 360), 'polar'));
     //add Behaviour
     // emitter.addBehaviour(new Proton.Color('ff0000', 'random'));
@@ -31,43 +31,57 @@ class QuarkBench{
     emitter.emit();
 
     emitter.particleCreated.add((particle)=>{
-      const sp = new PIXI.Sprite(txt);
+      // let sp;
+      if(particle.sprite){
+        // console.log('reuse');
+        // sp = particle.sprite;
+        // sp.visible = true;
+        // sp.alpha = 1;
+      }else{
+        const sp = new PIXI.Sprite(txt);
+        particle.sprite = sp;
+        cnt.addChild(sp);
+      }
+
+
       // sp.width = 20;
       // sp.height = 20;
-
-
-      particle.sprite = sp;
-      cnt.addChild(sp);
     });
 
     emitter.particleUpdate.add((particle)=>{
       const sp = particle.sprite;
-      sp.position.x = particle.p.x;
-      sp.position.y = particle.p.y;
-      // sp.scale.x = particle.scale/2;
-      // sp.scale.y = particle.scale/2;
-      // sp.anchor.x = 0.5;
-      // sp.anchor.y = 0.5;
-      // sp.alpha = particle.alpha;
-      // sp.rotation = particle.rotation*Math.PI/180;
+      sp.position.set(particle.p.x, particle.p.y);
+      // sp.position.x = particle.p.x;
+      // sp.position.y = particle.p.y;
+    //   // sp.scale.x = particle.scale/2;
+    //   // sp.scale.y = particle.scale/2;
+    //   // sp.anchor.x = 0.5;
+    //   // sp.anchor.y = 0.5;
+    //   // sp.alpha = particle.alpha;
+    //   // sp.rotation = particle.rotation*Math.PI/180;
 
     });
 
 
     emitter.particleDead.add((particle) =>{
-      cnt.removeChild(particle.sprite);
+        // particle.sprite.visible = false;
+        // particle.sprite.alpha = 0;
+      // cnt.removeChild(particle.sprite);
     });
 
   }
 
 
   get spritesCnt() {
-    let len = 0;
-    this.stage.children.forEach((cnt) => {
-      len += cnt.children.length;
-    });
+    // let len = 0;
+    // this.stage.children.forEach((cnt) => {
+    //   len += cnt.children.length;
+    // });
 
-    return len;
+    // return len;
+    // 
+    // return this.emitter.particleCount;
+    return this.emitter.activeCount+'\n'+this.cnt.children.length;
   }
 
   update() {

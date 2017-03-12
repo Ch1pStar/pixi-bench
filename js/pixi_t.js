@@ -37,13 +37,14 @@ class PixiParticlesBench{
         "min": 0,
         "max": 360
       },
+      "noRotation": true,
       // "rotationSpeed": {
       //   "min": 0,
       //   "max": 10
       // },
       "lifetime": {
-        "min": 12,
-        "max": 12
+        "min": 25,
+        "max": 25
       },
       "blendMode": "normal",
       "frequency": 0.0005,

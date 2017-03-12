@@ -17,7 +17,7 @@ window.ProtonBench = ProtonBench;
 window.QuarkBench = QuarkBench;
 window.PixiBench = PixiParticlesBench;
 
-let maxParticles = 65000;
+let maxParticles = 51000;
 
 const textures = {
   bunny: bunnyTxt,
@@ -54,7 +54,7 @@ const init = () => {
   // stats.domElement.style.top = "520px";
 
   const spCounter = new PIXI.Text('lel', {fill: 0xffffff});
-  spCounter.y = h - spCounter.height;
+  spCounter.y = h - 300;
 
   const create_test_case = (type, containerType, txt) => {
     if(test && test.stage) delete test.stage;
@@ -74,7 +74,7 @@ const init = () => {
           'QuarkBench',
           'PixiBench',
         ],
-        currCase: 'ProtonBench',
+        currCase: 'QuarkBench',
         containerType: Object.keys(containers),
         currContainer: 'ParticleContainer',
         texture: Object.keys(textures),
@@ -111,7 +111,9 @@ const init = () => {
   }
 
   // create_test_case('BaseBench', 'ParticleContainer', textures.bunny);
-  create_test_case('ProtonBench', 'ParticleContainer', textures.bunny);
+  // create_test_case('QuarkBench', 'ParticleContainer', textures.bunny);
+  // create_test_case('ProtonBench', 'ParticleContainer', textures.bunny);
+  create_test_case('PixiBench', 'ParticleContainer', textures.bunny);
 
   create_ui();
 

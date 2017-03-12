@@ -20,7 +20,7 @@ class ProtonBench{
     emitter.rate = new Proton.Rate(Proton.getSpan(30, 50), .005);
     //add Initialize
     emitter.addInitialize(new Proton.Radius(15));
-    emitter.addInitialize(new Proton.Life(10));
+    emitter.addInitialize(new Proton.Life(11));
     emitter.addInitialize(new Proton.Velocity(2, Proton.getSpan(0, 360), 'polar'));
     //add Behaviour
     // emitter.addBehaviour(new Proton.Color('ff0000', 'random'));
@@ -63,12 +63,14 @@ class ProtonBench{
 
 
   get spritesCnt() {
-    let len = 0;
-    this.stage.children.forEach((cnt) => {
-      len += cnt.children.length;
-    });
+    // let len = 0;
+    // this.stage.children.forEach((cnt) => {
+    //   len += cnt.children.length;
+    // });
 
-    return len;
+    // return len;
+
+    return this.emitter.particles.length;
   }
 
   update() {
